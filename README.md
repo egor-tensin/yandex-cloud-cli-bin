@@ -1,4 +1,4 @@
-This has been expired by the [yandex-cloud-bin] package, but this one fixes a
+This has been inspired by the [yandex-cloud-bin] package, but this one fixes a
 couple of things.
 
 * The undocumented `components post-update` is no longer called; this means
