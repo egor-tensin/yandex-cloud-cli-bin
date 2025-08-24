@@ -1,0 +1,6 @@
+This was inspired by the yandex-cloud-bin package, but I attempted to fix a
+couple of things.
+
+* The undocumented `components post-update` is no longer called; this means
+  that parent directory is no longer polluted by completion.* files.
+* $pkgver is calculated dynamically, which should make it easier to maintain.
