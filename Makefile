@@ -17,3 +17,24 @@ commit:
 .PHONY: push
 push:
 	git push 'ssh://aur@aur.archlinux.org/$(call escape,$(PKG_NAME)).git' "$$( git symbolic-ref HEAD ):master"
+
+.PHONY: maintenance
+maintenance:
+	$(MAKE) || true
+	$(MAKE)
+
+	@git_status="$$( git status --porcelain=v1 )" && \
+	if [ -z "$$git_status" ]; then \
+		true; \
+	elif [ "$$git_status" = ' M PKGBUILD' ] \
+			|| [ "$$git_status" = $$' M PKGBUILD\n M .SRCINFO' ]; then \
+		$(MAKE) commit; \
+		git push; \
+		$(MAKE) push; \
+	else \
+		echo; \
+		echo '-----------------------------------------------------------------'; \
+		echo 'Error: unrecognized modifications in the repository'; \
+		echo '-----------------------------------------------------------------'; \
+		exit 1; \
+	fi
