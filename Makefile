@@ -29,7 +29,6 @@ maintenance:
 	elif [ "$$git_status" = ' M PKGBUILD' ] \
 			|| [ "$$git_status" = $$' M PKGBUILD\n M .SRCINFO' ]; then \
 		$(MAKE) commit; \
-		git push; \
 		$(MAKE) push; \
 	else \
 		echo; \
