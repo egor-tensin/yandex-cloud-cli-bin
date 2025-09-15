@@ -26,8 +26,7 @@ maintenance:
 	@git_status="$$( git status --porcelain=v1 )" && \
 	if [ -z "$$git_status" ]; then \
 		true; \
-	elif [ "$$git_status" = ' M PKGBUILD\n M .SRCINFO' ] \
-			|| [ "$$git_status" = $$' M PKGBUILD\n M .SRCINFO' ]; then \
+	elif [ "$$git_status" = $$' M .SRCINFO\n M PKGBUILD' ]; then \
 		$(MAKE) commit; \
 		$(MAKE) push; \
 	else \
