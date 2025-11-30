@@ -27,8 +27,9 @@ maintenance:
 	if [ -z "$$git_status" ]; then \
 		true; \
 	elif [ "$$git_status" = $$' M .SRCINFO\n M PKGBUILD' ]; then \
-		$(MAKE) commit; \
-		$(MAKE) push; \
+		$(MAKE) commit && \
+			git push -q && \
+			$(MAKE) push ; \
 	else \
 		echo; \
 		echo '-----------------------------------------------------------------'; \
