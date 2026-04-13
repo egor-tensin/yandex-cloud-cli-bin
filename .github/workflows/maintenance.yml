@@ -1,0 +1,47 @@
+name: yandex-cloud-cli-bin
+
+on:
+  workflow_call:
+  workflow_dispatch:
+
+# For good reasons, GitHub Actions people made the decision to add the
+# container: functionality. For some other reason, when running inside a
+# container:, they made an insane, completely batshit crazy decision to set
+# $HOME to something other than /root. This breaks a bunch of things, which is
+# why all the insanity is there below.
+#
+# makepkg people are similarly insane, which is why they hard-forbid running
+# makepkg as root, because they're crazy. This is cause for the other stupid
+# workarounds below.
+
+jobs:
+  maintenance:
+    runs-on: ubuntu-latest
+    container:
+      image: archlinux:base-devel
+    steps:
+      - name: Install dependencies
+        run: |
+          pacman -Syu --noconfirm git openssh
+      - name: Add builder user
+        run: |
+          useradd -m -s /bin/bash builder
+      - name: Add SSH key
+        run: |
+          mkdir -p /home/builder/.ssh/
+          cat > /home/builder/.ssh/config <<'EOF'
+          StrictHostKeyChecking no
+          EOF
+          cat > /home/builder/.ssh/id_ed25519 <<'EOF'
+          ${{ secrets.SSH_KEY }}
+          EOF
+          chown -R builder:builder /home/builder/.ssh
+          chmod 0600 /home/builder/.ssh/id_ed25519
+      - name: Configure git
+        run: |
+          runuser -u builder -- git config --global user.name 'Egor Tensin'
+          runuser -u builder -- git config --global user.email 'egor@tensin.name'
+      - name: Run maintenance
+        run: |
+          runuser -u builder -- git clone -q ssh://git@bitbucket.org/egor-tensin/yandex-cloud-cli-bin.git /home/builder/yandex-cloud-cli-bin
+          runuser -u builder -- make -C /home/builder/yandex-cloud-cli-bin maintenance
