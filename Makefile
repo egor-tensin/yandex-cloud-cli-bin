@@ -28,8 +28,8 @@ maintenance:
 		true; \
 	elif [ "$$git_status" = $$' M .SRCINFO\n M PKGBUILD' ]; then \
 		$(MAKE) commit && \
-			git push -q && \
-			$(MAKE) push ; \
+			$(MAKE) push && \
+			git push -q ; \
 	else \
 		echo; \
 		echo '-----------------------------------------------------------------'; \
