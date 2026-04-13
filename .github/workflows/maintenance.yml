@@ -37,15 +37,22 @@ jobs:
         run: |
           useradd -m -s /bin/bash builder
           chown -R builder:builder -- "$GITHUB_WORKSPACE"
+      - name: Configure SSH
+        run: |
+          mkdir -p /home/builder/.ssh/
+          cat > /home/builder/.ssh/config <<'EOF'
+          StrictHostKeyChecking no
+          EOF
+          cat > /home/builder/.ssh/id_ed25519 <<'EOF'
+          ${{ secrets.SSH_KEY }}
+          EOF
+          chown -R builder:builder /home/builder/.ssh
+          chmod 0600 /home/builder/.ssh/id_ed25519
       - name: Configure git
         run: |
           # See https://github.com/actions/checkout#push-a-commit-using-the-built-in-token
           runuser -u builder -- git -C "$GITHUB_WORKSPACE" config user.name "github-actions[bot]"
           runuser -u builder -- git -C "$GITHUB_WORKSPACE" config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-      - name: Set up ssh-agent
-        uses: webfactory/ssh-agent@v0.10.0
-        with:
-          ssh-private-key: '${{ secrets.SSH_KEY }}'
       - name: Run maintenance
         run: |
           runuser -u builder -- make -C "$GITHUB_WORKSPACE" maintenance
