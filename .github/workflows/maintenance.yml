@@ -42,6 +42,10 @@ jobs:
           # See https://github.com/actions/checkout#push-a-commit-using-the-built-in-token
           runuser -u builder -- git -C "$GITHUB_WORKSPACE" config user.name "github-actions[bot]"
           runuser -u builder -- git -C "$GITHUB_WORKSPACE" config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+      - name: Set up ssh-agent
+        uses: webfactory/ssh-agent@v0.10.0
+        with:
+          ssh-private-key: '${{ secrets.SSH_KEY }}'
       - name: Run maintenance
         run: |
           runuser -u builder -- make -C "$GITHUB_WORKSPACE" maintenance
