@@ -20,18 +20,25 @@ jobs:
     container:
       image: archlinux:base-devel
     steps:
-      - name: Checkout
-        uses: actions/checkout@v6
+      # This step must be done before actions/checkout. From the latter's
+      # output:
+      #
+      #     To create a local Git repository instead, add Git 2.18 or higher to the PATH
+      #
       - name: Install dependencies
         run: |
           pacman -Syu --noconfirm git openssh
+      - name: Checkout
+        uses: actions/checkout@v6
       - name: Add builder user
         run: |
           useradd -m -s /bin/bash builder
+          chown -R builder:builder -- "$GITHUB_WORKSPACE"
       - name: Configure git
         run: |
-          runuser -u builder -- git config --global user.name 'Egor Tensin'
-          runuser -u builder -- git config --global user.email 'egor@tensin.name'
+          # See https://github.com/actions/checkout#push-a-commit-using-the-built-in-token
+          runuser -u builder -- git -C "$GITHUB_WORKSPACE" config user.name "github-actions[bot]"
+          runuser -u builder -- git -C "$GITHUB_WORKSPACE" config user.email "41898282+github-actions[bot]@users.noreply.github.com"
       - name: Run maintenance
         run: |
           runuser -u builder -- git clone -q ssh://git@bitbucket.org/egor-tensin/yandex-cloud-cli-bin.git /home/builder/yandex-cloud-cli-bin
