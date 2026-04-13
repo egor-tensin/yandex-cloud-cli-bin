@@ -1,4 +1,4 @@
-name: yandex-cloud-cli-bin
+name: Maintenance
 
 on:
   workflow_call:
@@ -16,6 +16,7 @@ on:
 
 jobs:
   maintenance:
+    name: Maintenance
     runs-on: ubuntu-latest
     container:
       image: archlinux:base-devel
