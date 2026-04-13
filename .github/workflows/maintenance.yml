@@ -28,17 +28,6 @@ jobs:
       - name: Add builder user
         run: |
           useradd -m -s /bin/bash builder
-      - name: Add SSH key
-        run: |
-          mkdir -p /home/builder/.ssh/
-          cat > /home/builder/.ssh/config <<'EOF'
-          StrictHostKeyChecking no
-          EOF
-          cat > /home/builder/.ssh/id_ed25519 <<'EOF'
-          ${{ secrets.SSH_KEY }}
-          EOF
-          chown -R builder:builder /home/builder/.ssh
-          chmod 0600 /home/builder/.ssh/id_ed25519
       - name: Configure git
         run: |
           runuser -u builder -- git config --global user.name 'Egor Tensin'
