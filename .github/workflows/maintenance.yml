@@ -1,7 +1,6 @@
 name: Maintenance
 
 on:
-  workflow_call:
   workflow_dispatch:
 
 # For good reasons, GitHub Actions people made the decision to add the
