@@ -41,5 +41,4 @@ jobs:
           runuser -u builder -- git -C "$GITHUB_WORKSPACE" config user.email "41898282+github-actions[bot]@users.noreply.github.com"
       - name: Run maintenance
         run: |
-          runuser -u builder -- git clone -q ssh://git@bitbucket.org/egor-tensin/yandex-cloud-cli-bin.git /home/builder/yandex-cloud-cli-bin
-          runuser -u builder -- make -C /home/builder/yandex-cloud-cli-bin maintenance
+          runuser -u builder -- make -C "$GITHUB_WORKSPACE" maintenance
