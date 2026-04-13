@@ -20,6 +20,8 @@ jobs:
     container:
       image: archlinux:base-devel
     steps:
+      - name: Checkout
+        uses: actions/checkout@v6
       - name: Install dependencies
         run: |
           pacman -Syu --noconfirm git openssh
