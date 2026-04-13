@@ -1,5 +1,5 @@
 * AUR: https://aur.archlinux.org/packages/yandex-cloud-cli-bin
-* GitHub: https://github.com/egor-tensin/yandex-cloud-cli-bin
+* GitHub: https://github.com/egor-tensin/yandex-cloud-cli-bin/tree/aur
 
 This was inspired by the [yandex-cloud-bin] package, but this one fixes a
 couple of things.
@@ -11,3 +11,6 @@ couple of things.
 * Version updates are automated to be done once a week.
 
 [yandex-cloud-bin]: https://aur.archlinux.org/packages/yandex-cloud-bin/
+
+The default branch has the GitHub Action workflows to automate things, because
+they must be stored in .github/, and AUR hard-forbids subdirectories.
