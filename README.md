@@ -1,5 +1,5 @@
 * AUR: https://aur.archlinux.org/packages/yandex-cloud-cli-bin
-* GitHub: https://github.com/egor-tensin/yandex-cloud-cli-bin
+* GitHub: https://github.com/egor-tensin/yandex-cloud-cli-bin/tree/aur
 
 This was inspired by the [yandex-cloud-bin] package, but this one fixes a
 couple of things.
