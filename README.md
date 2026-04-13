@@ -1,16 +1,9 @@
 * AUR: https://aur.archlinux.org/packages/yandex-cloud-cli-bin
 * GitHub: https://github.com/egor-tensin/yandex-cloud-cli-bin/tree/aur
 
-This was inspired by the [yandex-cloud-bin] package, but this one fixes a
-couple of things.
+**See the `aur` branch for the actual content.**
 
-* The undocumented `components post-update` is no longer called; this means
-  that parent directory is no longer polluted by completion.*.inc files.
-* $pkgver is calculated dynamically, which makes it easier to maintain and
-  allows automation.
-* Version updates are automated to be done once a week.
-
-[yandex-cloud-bin]: https://aur.archlinux.org/packages/yandex-cloud-bin/
-
-The default branch has the GitHub Action workflows to automate things, because
-they must be stored in .github/, and AUR hard-forbids subdirectories.
+This branch only exists so that I can use GitHub Actions workflows to automate
+things.
+The workflows must be stored in .github/, and AUR hard-forbids subdirectories.
+In addition, GitHub Actions scheduled runs don't run on non-default branches.
