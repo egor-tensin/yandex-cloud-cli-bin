@@ -34,6 +34,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
         with:
+          ref: aur
           # Re-using the Jekyll projects token here BTW:
           token: '${{ secrets.GH_TOKEN }}'
       - name: Add builder user
