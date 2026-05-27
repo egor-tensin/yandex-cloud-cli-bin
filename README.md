@@ -6,8 +6,6 @@ couple of things.
 
 * The undocumented `components post-update` is no longer called; this means
   that parent directory is no longer polluted by completion.*.inc files.
-* $pkgver is calculated dynamically, which makes it easier to maintain and
-  allows automation.
 * Version updates are automated to be done once a week.
 
 [yandex-cloud-bin]: https://aur.archlinux.org/packages/yandex-cloud-bin/
