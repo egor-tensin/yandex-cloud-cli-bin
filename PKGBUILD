@@ -10,14 +10,6 @@ _base_url='https://storage.yandexcloud.net/yandexcloud-yc/release'
 source=("yc-$pkgver::$_base_url/${pkgver}/linux/amd64/yc")
 sha256sums=(SKIP)
 
-_curl() {
-    curl --silent --show-error --location --connect-timeout 5 "$@"
-}
-
-pkgver() {
-    _curl -- "$_base_url/stable"
-}
-
 prepare() {
     chmod +x "yc-$pkgver"
 }
