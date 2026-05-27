@@ -24,10 +24,10 @@ BASE_URL := https://storage.yandexcloud.net/yandexcloud-yc/release
 pkgver:
 	@new_pkgver=$$( curl --silent --show-error --location --connect-timeout 5 -- '$(call escape,$(BASE_URL))/stable' ) && \
 		echo "Current pkgver: $$new_pkgver" && \
-		. PKGBUILD && \
+		source PKGBUILD && \
 		if [ "$$pkgver" != "$$new_pkgver" ]; then \
-		    sed -i -e "s/^pkgver=.*/pkgver=$$new_pkgver/" PKGBUILD && \
-		    sed -i -e "s/^pkgrel=.*/pkgrel=1/" PKGBUILD; \
+			sed -i -e "s/^pkgver=.*/pkgver=$$new_pkgver/" PKGBUILD && \
+			sed -i -e "s/^pkgrel=.*/pkgrel=1/" PKGBUILD; \
 		fi
 
 
