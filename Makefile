@@ -23,8 +23,9 @@ BASE_URL := https://storage.yandexcloud.net/yandexcloud-yc/release
 .PHONY: pkgver
 pkgver:
 	@new_pkgver=$$( curl --silent --show-error --location --connect-timeout 5 -- '$(call escape,$(BASE_URL))/stable' ) && \
-		echo "Current pkgver: $$new_pkgver" && \
 		source PKGBUILD && \
+		echo "Package pkgver: $$pkgver" && \
+		echo "Upstream pkgver: $$new_pkgver" && \
 		if [ "$$pkgver" != "$$new_pkgver" ]; then \
 			sed -i -e "s/^pkgver=.*/pkgver=$$new_pkgver/" PKGBUILD && \
 			sed -i -e "s/^pkgrel=.*/pkgrel=1/" PKGBUILD; \
