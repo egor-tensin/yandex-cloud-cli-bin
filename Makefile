@@ -7,17 +7,25 @@ all: build
 
 .PHONY: build
 build:
+	@echo '======================================================= Build ==='
 	makepkg --clean --cleanbuild --force --noconfirm --noprogressbar --syncdeps
 	makepkg --printsrcinfo > .SRCINFO
+	@echo '================================================================='
 
 .PHONY: commit
 commit:
-	git add .SRCINFO
-	source ./PKGBUILD && git commit -am "aur: $$pkgver-$$pkgrel"
+	@echo '====================================================== Commit ==='
+	git add PKGBUILD .SRCINFO
+	source ./PKGBUILD && git commit -m "aur: $$pkgver-$$pkgrel"
+	@echo '================================================================='
 
 .PHONY: push
 push:
+	@echo '================================================= Push to AUR ==='
 	git push 'ssh://aur@aur.archlinux.org/$(call escape,$(PKG_NAME)).git' "$$( git symbolic-ref HEAD ):master"
+	@echo '============================================ Push to upstream ==='
+	git push
+	@echo '================================================================='
 
 BASE_URL := https://storage.yandexcloud.net/yandexcloud-yc/release
 
@@ -25,8 +33,10 @@ BASE_URL := https://storage.yandexcloud.net/yandexcloud-yc/release
 pkgver:
 	@new_pkgver=$$( curl --silent --show-error --location --connect-timeout 5 -- '$(call escape,$(BASE_URL))/stable' ) && \
 	source PKGBUILD && \
+	echo '================================================ Check pkgver ===' && \
 	echo "Package pkgver: $$pkgver" && \
 	echo "Upstream pkgver: $$new_pkgver" && \
+	echo '=================================================================' && \
 	if [ "$$pkgver" != "$$new_pkgver" ]; then \
 		sed -i -e "s/^pkgver=.*/pkgver=$$new_pkgver/" PKGBUILD && \
 		sed -i -e "s/^pkgrel=.*/pkgrel=1/" PKGBUILD; \
@@ -42,7 +52,6 @@ maintenance: pkgver
 		true; \
 	elif [ "$$git_status" = $$' M .SRCINFO\n M PKGBUILD' ]; then \
 		$(MAKE) commit && \
-		git push -q && \
 		$(MAKE) push ; \
 	else \
 		echo; \
