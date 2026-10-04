@@ -10,11 +10,11 @@ on:
 # container: functionality. For some other reason, when running inside a
 # container:, they made an insane, completely batshit crazy decision to set
 # $HOME to something other than /root. This breaks a bunch of things, which is
-# why all the insanity is there below.
+# why all the insanity is there in aur:./Makefile
 #
 # makepkg people are similarly insane, which is why they hard-forbid running
 # makepkg as root, because they're crazy. This is cause for the other stupid
-# workarounds below.
+# workarounds in aur:./Makefile
 
 jobs:
   maintenance:
@@ -22,6 +22,9 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: archlinux:base-devel
+      env:
+        SSH_KEY: |
+          ${{ secrets.SSH_KEY }}
     steps:
       # This step must be done before actions/checkout. From the latter's
       # output:
@@ -37,28 +40,6 @@ jobs:
           ref: aur
           # Without the token, GitHub returns 403.
           token: '${{ secrets.GH_TOKEN }}'
-      - name: Add builder user
-        run: |
-          useradd -m -s /bin/bash builder
-          passwd -d builder
-          echo 'builder ALL=(ALL) ALL' >> /etc/sudoers
-          chown -R builder:builder -- "$GITHUB_WORKSPACE"
-      - name: Configure SSH
-        run: |
-          mkdir -p /home/builder/.ssh/
-          cat > /home/builder/.ssh/config <<'EOF'
-          StrictHostKeyChecking no
-          EOF
-          cat > /home/builder/.ssh/id_ed25519 <<'EOF'
-          ${{ secrets.SSH_KEY }}
-          EOF
-          chown -R builder:builder /home/builder/.ssh
-          chmod 0600 /home/builder/.ssh/id_ed25519
-      - name: Configure git
-        run: |
-          # See https://github.com/actions/checkout#push-a-commit-using-the-built-in-token
-          runuser -u builder -- git -C "$GITHUB_WORKSPACE" config user.name "github-actions[bot]"
-          runuser -u builder -- git -C "$GITHUB_WORKSPACE" config user.email "41898282+github-actions[bot]@users.noreply.github.com"
       - name: Run maintenance
         run: |
-          runuser -u builder -- make -C "$GITHUB_WORKSPACE" maintenance
+          make -C "$GITHUB_WORKSPACE" ci
