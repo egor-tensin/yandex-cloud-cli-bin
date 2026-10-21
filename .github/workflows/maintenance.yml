@@ -22,9 +22,8 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: archlinux:base-devel
-      env:
-        SSH_KEY: |
-          ${{ secrets.SSH_KEY }}
+    permissions:
+      contents: write
     steps:
       # This step must be done before actions/checkout. From the latter's
       # output:
@@ -37,9 +36,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v7
         with:
+          persist-credentials: true
           ref: aur
-          # Without the token, GitHub returns 403.
-          token: '${{ secrets.GH_TOKEN }}'
       - name: Run maintenance
+        env:
+          SSH_KEY: ${{ secrets.SSH_KEY }}
         run: |
           make -C "$GITHUB_WORKSPACE" ci
