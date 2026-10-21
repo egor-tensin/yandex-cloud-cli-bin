@@ -6,6 +6,8 @@ on:
     - cron: '30 02 * * 5'
   workflow_dispatch:
 
+permissions: {}
+
 # For good reasons, GitHub Actions people made the decision to add the
 # container: functionality. For some other reason, when running inside a
 # container:, they made an insane, completely batshit crazy decision to set
